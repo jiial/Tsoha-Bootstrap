@@ -1,10 +1,48 @@
 #main-container{
   max-width: 1200px;
-  padding: 10px 25px;
+  padding: 10px 15px;
   margin: 0px auto;
+  min-height: 100%;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background: lightgrey; /* For browsers that do not support gradients */
+
 }
 
 .navbar .container-fluid{
   max-width: 1200px;
   margin: 0px auto;
+  background-color: orange;
 }
+
+.navbar .header {
+	background-color: grey;
+}
+
+th {
+    background-color: #ea9525;
+    color: white;
+}
+
+td {
+	background: white;
+}
+
+html {
+    min-height: 100%;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background: grey; /* For browsers that do not support gradients */
+    background: -webkit-linear-gradient(grey, black); /* For Safari 5.1 to 6.0 */
+    background: -o-linear-gradient(grey, black); /* For Opera 11.1 to 12.0 */
+    background: -moz-linear-gradient(grey, black); /* For Firefox 3.6 to 15 */
+    background: linear-gradient(grey, orange); /* Standard syntax (must be last) */
+}
+
+
+
+

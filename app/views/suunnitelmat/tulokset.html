@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Tuloksesi</h1>
+  <p>                         
+        <br>
+        </br>               
+  </p>
+
+  <table class="table table-hover table-bordered">
+    <thead>
+      <tr>
+        <th>Tulos</th>
+        <th>Kilpailumuoto</th>
+        <th>Aselaji</th>
+        <th>Kilpailu</th>
+        <th>Päivämäärä</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr>
+        <td><a href="tulos">615.4</a></td>
+        <td>60 ls</td>
+        <td>Ilmakivääri</td>
+        <td>Kupittaan kisat</td>
+        <td>23.1.2017</td>
+        <td><a class="btn btn-default btn-sm" href="tuloksenMuokkaus">Muokkaa</a></td>
+      </tr>
+      <tr>
+        <td><a href="#">568</a></td>
+        <td>3x20 ls</td>
+        <td>Pienoiskivääri</td>
+        <td>Matin kisat</td>
+        <td>28.6.2016</td>
+        <td><a class="btn btn-default btn-sm" href="#">Muokkaa</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    <a href="#" class="btn btn-warning">Lisää tulos</a>
+  </p>
+
+{% endblock %}
+
