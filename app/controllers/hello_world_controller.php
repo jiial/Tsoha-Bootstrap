@@ -9,19 +9,23 @@
 
     public static function sandbox(){
       // Testaa koodiasi täällä
-      View::make('helloworld.html');
+      $tulos = Tulos::etsi(1);
+      $tulokset = Tulos::kaikki();
+
+      Kint::dump($tulos);
+      Kint::dump($tulokset);
     }
 
     public static function tulokset(){
-      View::make('suunnitelmat/tulokset.html');
+      View::make('tulos/tulokset.html');
     }
 
     public static function tulos(){
-      View::make('suunnitelmat/tulos.html');
+      View::make('tulos/tulos.html');
     }
 
     public static function tuloksenMuokkaus(){
-      View::make('suunnitelmat/tuloksenMuokkaus.html');
+      View::make('tulos/tuloksenMuokkaus.html');
     }
 
     public static function kirjautuminen(){
@@ -30,5 +34,9 @@
 
     public static function etusivu(){
       View::make('suunnitelmat/etusivu.html');
+    }
+
+    public static function uusi(){
+      View::make('tulos/uusi.html');
     }
   }

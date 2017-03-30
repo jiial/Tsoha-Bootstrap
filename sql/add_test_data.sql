@@ -13,9 +13,9 @@ INSERT INTO KilpailumuodonLaji (aselaji, kilpailumuoto) VALUES (2, 2);
 INSERT INTO Tulos (arvo, kilpailu, paivamaara, lisatiedot, napakympit, kayttaja, aselaji, kilpailumuoto) VALUES (615.4, 'Kupittaan kisa', NOW(), 'Meni ihan ok', 38, 1, 1, 1);
 INSERT INTO Tulos (arvo, kilpailu, paivamaara, lisatiedot, napakympit, kayttaja, aselaji, kilpailumuoto) VALUES (568, 'Matin kisat', NOW(), 'Meni semisti', 35, 2, 2, 2);
 
-INSERT INTO Sarja (arvo, tulos) VALUES (102.5, 0, 1);
-INSERT INTO Sarja (arvo, tulos) VALUES (103.2, 0, 1);
-INSERT INTO Sarja (arvo, tulos) VALUES (101.7, 0, 1);
-INSERT INTO Sarja (arvo, tulos) VALUES (102.0, 0, 1);
-INSERT INTO Sarja (arvo, tulos) VALUES (103.1, 0, 1);
-INSERT INTO Sarja (arvo, tulos) VALUES (102.9, 0, 1);
+INSERT INTO Sarja (arvo, tulos) VALUES (102.5, 1);
+INSERT INTO Sarja (arvo, tulos) VALUES (103.2, 1);
+INSERT INTO Sarja (arvo, tulos) VALUES (101.7, 1);
+INSERT INTO Sarja (arvo, tulos) VALUES (102.0, 1);
+INSERT INTO Sarja (arvo, tulos) VALUES (103.1, 1);
+INSERT INTO Sarja (arvo, tulos) VALUES (102.9, 1);

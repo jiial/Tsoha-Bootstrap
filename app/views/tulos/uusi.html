@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Lisää uusi tulos</h1><br>
+
+  <form method="post" action="{{base_path}}/uusitulos">
+    <div class="form-group">
+      <label>Tulos</label><br>
+      <input name="arvo" maxlength="5" size="6" type="text">
+    </div>
+
+    <div class="form-group">
+      <label>Sarjat</label><br>
+      <input name="sarja1" size="4" type="text" maxlength="5">
+      <input name="sarja2" size="4" type="text" maxlength="5">
+      <input name="sarja3" size="4" type="text" maxlength="5">
+      <input name="sarja4" size="4" type="text" maxlength="5">
+      <input name="sarja5" size="4" type="text" maxlength="5">
+      <input name="sarja6" size="4" type="text" maxlength="5">
+    </div> 
+
+    <div class="form-group">
+      <label>Aselaji</label><br>
+      <select name="aselaji">
+        <option name=1 value="1">Ilmakivääri</option>
+        <option name="pienoiskivaari" value="2">Pienoiskivääri</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Kilpailumuoto</label><br>
+      <select name="kilpailumuoto">
+        <option name="60" value="1">60 ls</option>
+        <option name="3x20" value="2">3x20 ls</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Napakympit</label><br>
+      <input name="napakympit" size="4" maxlength="2" type="text">
+    </div>
+
+    <div class="form-group">
+      <label>Kilpailu</label><br>
+      <input name="kilpailu" maxlength="30" size="20" type="text">
+    </div>
+
+    <div class="form-group">
+      <label>Päivämäärä</label><br>
+      <input name="paivamaara" size="8" type="text" maxlength="10">
+    </div>
+
+    <div class="form-group">
+      <label>Lisätiedot</label><br>
+       <textarea name="lisatiedot" class="form" cols="60" maxlength="500"></textarea>
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-warning">Lisää</button>
+    </div>
+  </form>
+{% endblock %}

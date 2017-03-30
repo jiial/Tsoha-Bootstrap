@@ -8,12 +8,16 @@
     HelloWorldController::sandbox();
   });
 
-  $routes->get('/tulokset', function() {
-  	HelloWorldController::tulokset();
+  $routes->get('/tulos', function() {
+  	TuloksetController::index();
   });
 
-  $routes->get('/tulos', function() {
-  	HelloWorldController::tulos();
+  $routes->get('/tulos/:id', function($id){
+    TuloksetController::nayta($id);
+  });
+
+  $routes->get('/tulokset', function() {
+  	TuloksetController::index();
   });
 
   $routes->get('/tuloksenMuokkaus', function() {
@@ -26,4 +30,16 @@
 
   $routes->get('/etusivu', function() {
   	HelloWorldController::etusivu();
+  });
+
+  $routes->get('/uusi', function() {
+    HelloWorldController::uusi();
+  });
+
+  $routes->post('/uusitulos', function() {
+    TuloksetController::varastoi();
+  });
+
+  $routes->get('/uusitulos/uusi', function() {
+    TuloksetController::luo();
   });
