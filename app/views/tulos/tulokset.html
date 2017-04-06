@@ -2,8 +2,13 @@
 {% block content %}
   <h1>Tuloksesi</h1>
   <p>                         
-        <br>
-        </br>               
+      <br>
+      </br>  
+        {% if message %}
+          <div class="alert alert-success">
+            {{message}}      
+          </div>
+        {% endif %}             
   </p>
 
   <table class="table table-hover table-bordered">
@@ -33,7 +38,7 @@
   </table>
 
   <p>
-    <a href="#" class="btn btn-warning">Lisää tulos</a>
+    <a href="{{base_path}}/uusi" class="btn btn-warning">Lisää tulos</a>
   </p>
 
 {% endblock %}

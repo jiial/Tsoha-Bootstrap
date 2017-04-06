@@ -1,45 +1,60 @@
 {% extends "base.html" %}
 {% block content %}
   <h1>Muokkaa tulosta</h1><br>
-  <form>
+
+  {% if virheet %}
+    <div class="alert alert-danger">
+      <ul>
+        {% for error in virheet %}
+          <li>{{error}}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %} 
+
+  <form method="post" action="{{base_path}}/tulos/{{attribuutit.id}}/muokkaa">
     <div class="form-group">
       <label>Tulos</label><br>
-      <input size="4" value="615.4" type="text" maxlength="5">
+      <input name="arvo" size="4" value="{{attribuutit.arvo}}"" type="text" maxlength="5">
     </div>
     <div class="form-group">
       <label>Sarjat</label><br>
-      <input size="4" value="102.5" type="text" maxlength="5">
-      <input size="4" value="103.2" type="text" maxlength="5">
-      <input size="4" value="101.7" type="text" maxlength="5">
-      <input size="4" value="102.0" type="text" maxlength="5">
-      <input size="4" value="103.1" type="text" maxlength="5">
-      <input size="4" value="102.9" type="text" maxlength="5">
+      <input name="sarja1" size="4" value="102.5" type="text" maxlength="5">
+      <input name="sarja2" size="4" value="103.2" type="text" maxlength="5">
+      <input name="sarja3" size="4" value="101.7" type="text" maxlength="5">
+      <input name="sarja4" size="4" value="102.0" type="text" maxlength="5">
+      <input name="sarja5" size="4" value="103.1" type="text" maxlength="5">
+      <input name="sarja6" size="4" value="102.9" type="text" maxlength="5">
     </div>  
     <div class="form-group">
       <label>Aselaji</label><br>
-      <select>
-        <option value="Ilmakivääri">Ilmakivääri</option>
-        <option value="Pienoiskivääri">Pienoiskivääri</option>
+      <select name="aselaji">
+        <option value="1">Ilmakivääri</option>
+        <option value="2">Pienoiskivääri</option>
       </select>
     </div>
     <div class="form-group">
       <label>Kilpailumuoto</label><br>
-      <select>
-        <option value="60 ls">60 ls</option>
-        <option value="3x20 ls">3x20 ls</option>
+      <select name="kilpailumuoto">
+        <option value="1">60 ls</option>
+        <option value="2">3x20 ls</option>
       </select>
     </div>
     <div class="form-group">
-      <label>Päivämäärä</label><br>
-      <input size="8" value="29.1.2017" type="text" maxlength="10">
-    </div>
+      <label>Napakympit</label><br>
+      <input name="napakympit" size="4" maxlength="2" type="text" value="{{attribuutit.napakympit}}">
+    </div> 
     <div class="form-group">
       <label>Kilpailu</label><br>
-      <input size="20" value="Kupittaan kisa" type="text">
+      <input name="kilpailu" size="20" value="{{attribuutit.kilpailu}}" type="text">
+    </div>
+    <div class="form-group">
+      <label>Päivämäärä (vuosi-kuukausi-päivä)</label><br>
+      <input name="paivamaara" size="8" value="{{attribuutit.paivamaara}}" type="text" maxlength="10">
     </div>
     <div class="form-group">
       <label>Lisätiedot</label><br>
-       <textarea class="form" cols="60" maxlength="500">Kisa meni oman tason mukaisesti, pito oli hyvä. Keskivaiheilla pari heikompaa laukausta, muuten perusvarmaa tekemistä.
+       <textarea name="lisatiedot" class="form" cols="60" maxlength="500">{{attribuutit.lisatiedot}}
       </textarea>
     </div>
     <div class="form-group">

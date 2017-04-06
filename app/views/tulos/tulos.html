@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
+
+<a href="{{base_path}}/tulokset" class="btn btn-warning">Takaisin</a>
   <h1>{{tulos.arvo}}</h1>
+
+  {% if message %}
+    <div class="alert alert-success">
+      {{message}}      
+    </div>
+  {% endif %} 
 
   <table class="table table-bordered">
   <th>102.5</th>
@@ -23,6 +31,9 @@
     {{tulos.lisatiedot}}
   </p>
   <p>
-    <button class="btn btn-warning">Poista</button> <a href="{{base_path}}/tulos/{{tulos.id}}/muokkaa" class="btn btn-default">Muokkaa</a>
+    <form method="post" action="{{base_path}}/tulos/{{tulos.id}}/poista" style="display: inline-block;">
+        <button type="submit" class="btn btn-warning">Poista</button>
+    </form> 
+      <a href="{{base_path}}/tulos/{{tulos.id}}/muokkaa" class="btn btn-default">Muokkaa</a>   
   </p>
 {% endblock %}

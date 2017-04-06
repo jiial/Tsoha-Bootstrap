@@ -36,10 +36,32 @@
     HelloWorldController::uusi();
   });
 
-  $routes->post('/uusitulos', function() {
+  $routes->post('/uusi', function() {
     TuloksetController::varastoi();
   });
 
   $routes->get('/uusitulos/uusi', function() {
     TuloksetController::luo();
   });
+
+  $routes->post('/tulos/:id/muokkaa', function($id){
+    TuloksetController::paivita($id);
+  });
+
+  $routes->get('/tulos/:id/muokkaa', function($id){
+    TuloksetController::muokkaa($id);
+  });
+
+  $routes->post('/tulos/:id/poista', function($id){
+    TuloksetController::tuhoa($id);
+  });
+
+  $routes->get('/login', function() {
+    KayttajaController::kirjautuminen();
+  });
+
+  $routes->post('/login', function() {
+    KayttajaController::kasittele_kirjautuminen();
+  });
+
+

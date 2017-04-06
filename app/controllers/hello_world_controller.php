@@ -9,11 +9,25 @@
 
     public static function sandbox(){
       // Testaa koodiasi täällä
-      $tulos = Tulos::etsi(1);
-      $tulokset = Tulos::kaikki();
+      //$tulos = Tulos::etsi(1);
+      //$tulokset = Tulos::kaikki();
 
-      Kint::dump($tulos);
-      Kint::dump($tulokset);
+      //Kint::dump($tulos);
+      //Kint::dump($tulokset);
+      $testi = new Tulos(array(
+      'id' => '100',  
+      'arvo' => '2',
+      'kilpailu' => '',
+      'paivamaara' => '02.04.2023',
+      'lisatiedot' => '',
+      'napakympit' => 'n',
+      'kayttaja' => 1,
+      'aselaji' => 1,
+      'kilpailumuoto' => 1
+      ));
+      $virheet = $testi->errors();
+
+      Kint::dump($virheet);
     }
 
     public static function tulokset(){
