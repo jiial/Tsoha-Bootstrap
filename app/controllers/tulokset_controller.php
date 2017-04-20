@@ -1,20 +1,44 @@
 <?php
 
 class TuloksetController extends BaseController{
+
+
 	public static function index(){
+		self::check_logged_in();
+		$user_logged_in = self::get_user_logged_in();
+		$parametrit = $_GET;
+		$options = array('kayttaja_id' => $user_logged_in->id);
 
-		$tulokset = Tulos::kaikki($_SESSION['kayttaja']);
+		$tulosten_maara = Tulos::laske();
+		$tulosten_maara = $tulosten_maara['count'];
+		
+		$page_size = 15;
+		$pages = ceil($tulosten_maara/$page_size);
 
-		View::make('tulos/tulokset.html', array('tulokset' => $tulokset));
+		if(isset($parametrit['search'])){
+			$options['search'] = $parametrit['search'];
+		}
+
+		$options['sivun_koko'] = $page_size;
+		$options['sivu'] = get_query_var('paged');
+		$tulokset = Tulos::kaikki($options);
+
+		View::make('tulos/tulokset.html', array('tulokset' => $tulokset, 'page_size' => $page_size, 'pages' => $pages));
 	}
 
 	public static function muokkaa($id){
+		self::check_logged_in();
 		$tulos = Tulos::etsi($id);
-		View::make('tulos/tuloksenMuokkaus.html', array('attribuutit' => $tulos));
+		$aselajit = Aselaji::kaikki();
+		$kilpailumuodot = Kilpailumuoto::kaikki();
+		View::make('tulos/tuloksenMuokkaus.html', array('attribuutit' => $tulos, 'aselajit' => $aselajit, 'kilpailumuodot' => $kilpailumuodot));
 	}
 
 	public static function paivita($id){
+		self::check_logged_in();
 		$parametrit = $_POST;
+
+		$aselaji = $parametrit['aselaji'];
 
 		$attribuutit = array(
 		    'id' => $id, 
@@ -31,8 +55,11 @@ class TuloksetController extends BaseController{
 		$tulos = new Tulos($attribuutit);
 		$virheet = $tulos->errors();
 
+		$aselajit = Aselaji::kaikki();
+		$kilpailumuodot = Kilpailumuoto::kaikki();
+
 		if(count($virheet) > 0){
-			View::make('/tulos/tuloksenMuokkaus.html', array('virheet' => $virheet, 'attribuutit' => $attribuutit));
+			View::make('/tulos/tuloksenMuokkaus.html', array('virheet' => $virheet, 'attribuutit' => $attribuutit, 'aselajit' => $aselajit, 'kilpailumuodot' => $kilpailumuodot));
 		}else{
 			$tulos->paivita($id);
 
@@ -42,6 +69,7 @@ class TuloksetController extends BaseController{
 	}
 
 	public static function tuhoa($id){
+		self::check_logged_in();
 		$tulos = new Tulos(array('id' => $id));
 
 		$tulos->poista();
@@ -57,6 +85,7 @@ class TuloksetController extends BaseController{
 	}
 
 	public static function varastoi(){
+		self::check_logged_in();
 
 		$parametrit = $_POST;
 
@@ -72,15 +101,35 @@ class TuloksetController extends BaseController{
 
 		);
 
+		//$attribuutit2 = array(
+		//	'arvo' => $parametrit['sarja1'],
+		//	'lisatiedot' => '',
+		//	'tulos' => $parametrit['']
+		//);
+
 		$tulos = new Tulos($attribuutit);
+		//$sarja1 = new Sarja($parametrit['sarja1'], '', $tulos);
+		//$sarja2 = new Sarja($parametrit['sarja2'], '', $tulos);
+		//$sarja3 = new Sarja($parametrit['sarja3'], '', $tulos);
+		//$sarja4 = new Sarja($parametrit['sarja4'], '', $tulos);
+		//$sarja5 = new Sarja($parametrit['sarja5'], '', $tulos);
+		//$sarja6 = new Sarja($parametrit['sarja6'], '', $tulos);
 		$virheet = $tulos->errors();
 
 		if(count($virheet) == 0){
 			$tulos->tallenna();
+			//$sarja1->tallenna();
+			//$sarja2->tallenna();
+			//$sarja3->tallenna();
+			//$sarja4->tallenna();
+			//$sarja5->tallenna();
+			//$sarja6->tallenna();
 
 			Redirect::to('/tulos/' . $tulos->id, array('message' => 'Tulos on lisätty järjestelmään!'));
 		}else{
-			View::make('/tulos/uusi.html', array('virheet' => $virheet, 'attribuutit' => $attribuutit));
+			$aselajit = Aselaji::kaikki();
+      		$kilpailumuodot = Kilpailumuoto::kaikki();
+			View::make('/tulos/uusi.html', array('virheet' => $virheet, 'attribuutit' => $attribuutit, 'aselajit' => $aselajit, 'kilpailumuodot' => $kilpailumuodot));
 		}
 		
 	}

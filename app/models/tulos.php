@@ -9,17 +9,50 @@ class Tulos extends BaseModel{
 		$this->validators = array('validoiArvo', 'validoiPaivamaara', 'validoiKilpailu', 'validoiNapakympit');
 	}
 
-	public static function kaikki($id){
+	public static function kaikki($options){
 
-		$query = DB::connection()->prepare('SELECT * FROM Tulos WHERE kayttaja = :id');
+        $query_string = 'SELECT * FROM Tulos WHERE kayttaja = :kayttaja_id';
+        $parametrit = array('kayttaja_id' => $options['kayttaja_id']);
+        if(isset($options['search'])){
+            $query_string .= ' AND kilpailu LIKE :like';
+            $parametrit['like'] = '%' . $options['search'] . '%';
+        }
 
-		$query->execute(array('id' => $id));
+        if(isset($options['sivu']) && isset($options['sivun_koko'])){
+            $sivun_koko = $options['sivun_koko'];
+            $sivu = $options['sivu'];
+        }else{
+            $sivun_koko = 15;
+            $sivu = 1;
+        }
+        $query_string .= ' LIMIT :limit OFFSET :offset';
+        $parametrit['limit'] = $sivun_koko;
+        $parametrit['offset'] = $sivun_koko * ($sivu - 1);
+
+		$query = DB::connection()->prepare($query_string);
+
+		$query->execute($parametrit);
 
 		$rivit = $query->fetchAll();
 		$tulokset = array();
 
 
 		foreach ($rivit as $rivi) {
+
+			$query = DB::connection()->prepare('SELECT nimi FROM Aselaji WHERE id = :id');
+
+		    $query->execute(array('id' => $rivi['aselaji']));
+
+		    $apu = $query->fetch();
+		    $aselaji = $apu['nimi'];
+
+		    $query = DB::connection()->prepare('SELECT nimi FROM Kilpailumuoto WHERE id = :id');
+
+		    $query->execute(array('id' => $rivi['kilpailumuoto']));
+
+		    $apu = $query->fetch();
+		    $kilpailumuoto = $apu['nimi'];	
+
 			
 			$tulokset[] = new Tulos(array(
 				'id' => $rivi['id'], 
@@ -29,13 +62,14 @@ class Tulos extends BaseModel{
 				'lisatiedot' => $rivi['lisatiedot'],
 				'napakympit' => $rivi['napakympit'],
 				'kayttaja' => $rivi['kayttaja'],
-				'aselaji' => $rivi['aselaji'],
-				'kilpailumuoto' => $rivi['kilpailumuoto']
+				'aselaji' => $aselaji,
+				'kilpailumuoto' => $kilpailumuoto
 				));
 		}
 
 		return $tulokset;
 	}
+
 
 	public static function etsi($id){
         $query = DB::connection()->prepare('SELECT * FROM Tulos WHERE id = :id LIMIT 1');
@@ -43,6 +77,20 @@ class Tulos extends BaseModel{
         $rivi = $query->fetch();
 
         if($rivi){
+        	$query = DB::connection()->prepare('SELECT nimi FROM Aselaji WHERE id = :id');
+
+		    $query->execute(array('id' => $rivi['aselaji']));
+
+		    $apu = $query->fetch();
+		    $aselaji = $apu['nimi'];
+
+		    $query = DB::connection()->prepare('SELECT nimi FROM Kilpailumuoto WHERE id = :id');
+
+		    $query->execute(array('id' => $rivi['kilpailumuoto']));
+
+		    $apu = $query->fetch();
+		    $kilpailumuoto = $apu['nimi'];	
+
             $tulos = new Tulos(array(
             'id' => $rivi['id'], 
 			'arvo' => $rivi['arvo'],
@@ -51,8 +99,8 @@ class Tulos extends BaseModel{
 			'lisatiedot' => $rivi['lisatiedot'],
 			'napakympit' => $rivi['napakympit'],
 			'kayttaja' => $rivi['kayttaja'],
-			'aselaji' => $rivi['aselaji'],
-			'kilpailumuoto' => $rivi['kilpailumuoto']
+			'aselaji' => $aselaji,
+			'kilpailumuoto' => $kilpailumuoto
 		    ));
 
             return $tulos;
@@ -104,6 +152,14 @@ class Tulos extends BaseModel{
     	Kint::dump($rivi);
     }
 
+    public function laske(){
+        $query = DB::connection()->prepare('SELECT COUNT(*) FROM Tulos WHERE kayttaja = :id');
+        $query->execute(array('id' => $_SESSION['kayttaja']));
+        $rivi = $query->fetch();
+
+        return $rivi;
+    }
+
     public function validoiArvo(){
   	    $virheet = array();
   	    if($this->arvo == '' || $this->arvo == null){
@@ -112,6 +168,9 @@ class Tulos extends BaseModel{
   	    if(strlen($this->arvo) < 3){
   	    	$virheet[] = 'Tuloksen arvon tulee olla vähintään kolme merkkiä pitkä.';
   	    }
+        if(is_numeric($this->arvo) == false){
+            $virheet[] = 'Tuloksen arvon tulee olla numero!';
+        }
 
   	    return $virheet;
     }

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+
+  <h1>{{sarja.arvo}}</h1>
+
+  {% if message %}
+    <div class="alert alert-success">
+      {{message}}      
+    </div>
+  {% endif %} 
+
+  <ul>
+    <li><strong><a href="{{base_path}}/tulos/{{sarja.tulos}}">Kokonaistulos</a></strong></li>
+    <li><strong>Lisätiedot: </strong>{{sarja.lisatiedot}}</li>
+  </ul>
+
+  <p>
+    <form method="post" action="{{base_path}}/sarja/{{sarja.id}}/poista" style="display: inline-block;">
+        <button type="submit" class="btn btn-warning">Poista</button>
+    </form> 
+      <a href="{{base_path}}/sarja/{{sarja.id}}/muokkaa" class="btn btn-default">Muokkaa</a>   
+  </p>
+{% endblock %}

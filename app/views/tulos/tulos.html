@@ -31,7 +31,7 @@
     {{tulos.lisatiedot}}
   </p>
   <p>
-    <form method="post" action="{{base_path}}/tulos/{{tulos.id}}/poista" style="display: inline-block;">
+    <form method="post" action="{{base_path}}/tulos/{{tulos.id}}/poista" class="destroy-form" data-confirm="Oletko varma, että haluat poistaa tuloksen?" style="display: inline-block;">
         <button type="submit" class="btn btn-warning">Poista</button>
     </form> 
       <a href="{{base_path}}/tulos/{{tulos.id}}/muokkaa" class="btn btn-default">Muokkaa</a>   

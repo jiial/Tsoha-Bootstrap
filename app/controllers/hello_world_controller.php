@@ -51,6 +51,8 @@
     }
 
     public static function uusi(){
-      View::make('tulos/uusi.html');
+      $aselajit = Aselaji::kaikki();
+      $kilpailumuodot = Kilpailumuoto::kaikki();
+      View::make('tulos/uusi.html', array('aselajit' => $aselajit, 'kilpailumuodot' => $kilpailumuodot));
     }
   }

@@ -6,7 +6,12 @@
    <div class="alert alert-warning">
       {{error}}      
     </div>
-  {% endif %}  
+  {% endif %} 
+  {% if message %}
+    <div class="alert alert-warning">
+      {{message}}      
+    </div>
+  {% endif %}   
   <form method="post" action="{{base_path}}/login">
     <div class="form-group">
       <label>Käyttäjätunnus</label><br>

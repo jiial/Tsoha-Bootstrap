@@ -34,5 +34,6 @@ CREATE TABLE Tulos(
 CREATE TABLE Sarja(
   id SERIAL PRIMARY KEY,
   arvo DECIMAL(4,1),
+  lisatiedot varchar(200),
   tulos INTEGER REFERENCES Tulos(id)
 );

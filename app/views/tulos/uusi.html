@@ -30,17 +30,19 @@
 
     <div class="form-group">
       <label>Aselaji</label><br>
-      <select name="aselaji" value="{{attribuutit.aselaji}}">
-        <option name=1 value="1">Ilmakivääri</option>
-        <option name="pienoiskivaari" value="2">Pienoiskivääri</option>
+      <select name="aselaji" value="{{aselaji.nimi}}">
+        {% for aselaji in aselajit %}
+          <option value="{{aselaji.id}}">{{aselaji.nimi}}</option>
+        {% endfor %}       
       </select>
     </div>
 
     <div class="form-group">
       <label>Kilpailumuoto</label><br>
-      <select name="kilpailumuoto" value="{{attribuutit.kilpailumuoto}}">
-        <option name="60" value="1">60 ls</option>
-        <option name="3x20" value="2">3x20 ls</option>
+      <select name="kilpailumuoto" value="{{kilpailumuoto.nimi}}">
+        {% for kilpailumuoto in kilpailumuodot %}
+          <option value="{{kilpailumuoto.id}}">{{kilpailumuoto.nimi}}</option>
+        {% endfor %}
       </select>
     </div>
 

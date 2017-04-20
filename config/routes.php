@@ -1,5 +1,9 @@
 <?php
 
+  function check_logged_in(){
+    BaseController::check_logged_in();
+  }
+
   $routes->get('/', function() {
     HelloWorldController::etusivu();
   });
@@ -8,16 +12,20 @@
     HelloWorldController::sandbox();
   });
 
-  $routes->get('/tulos', function() {
-  	TuloksetController::index();
-  });
-
-  $routes->get('/tulos/:id', function($id){
+  $routes->get('/tulos/:id', 'check_logged_in', function($id){
     TuloksetController::nayta($id);
   });
 
-  $routes->get('/tulokset', function() {
+  $routes->get('/tulokset', 'check_logged_in', function() {
   	TuloksetController::index();
+  });
+
+  $routes->get('/sarjat', function() {
+    SarjatController::index();
+  });
+
+  $routes->get('/sarja/:id', 'check_logged_in', function($id){
+    SarjatController::nayta($id);
   });
 
   $routes->get('/tuloksenMuokkaus', function() {
@@ -32,27 +40,27 @@
   	HelloWorldController::etusivu();
   });
 
-  $routes->get('/uusi', function() {
+  $routes->get('/uusi', 'check_logged_in', function() {
     HelloWorldController::uusi();
   });
 
-  $routes->post('/uusi', function() {
+  $routes->post('/uusi', 'check_logged_in', function() {
     TuloksetController::varastoi();
   });
 
-  $routes->get('/uusitulos/uusi', function() {
+  $routes->get('/uusitulos/uusi', 'check_logged_in', function() {
     TuloksetController::luo();
   });
 
-  $routes->post('/tulos/:id/muokkaa', function($id){
+  $routes->post('/tulos/:id/muokkaa', 'check_logged_in', function($id){
     TuloksetController::paivita($id);
   });
 
-  $routes->get('/tulos/:id/muokkaa', function($id){
+  $routes->get('/tulos/:id/muokkaa', 'check_logged_in', function($id){
     TuloksetController::muokkaa($id);
   });
 
-  $routes->post('/tulos/:id/poista', function($id){
+  $routes->post('/tulos/:id/poista', 'check_logged_in', function($id){
     TuloksetController::tuhoa($id);
   });
 
@@ -62,6 +70,10 @@
 
   $routes->post('/login', function() {
     KayttajaController::kasittele_kirjautuminen();
+  });
+
+  $routes->post('/logout', function() {
+    KayttajaController::logout();
   });
 
 
