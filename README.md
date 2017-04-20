@@ -20,10 +20,12 @@ Aiheena ampumaurheilijoille suunnattu henkilökohtainen tuloskirjanpitojärjeste
 * [Tuloksen tarkemmat tiedot](http://ljone.users.cs.helsinki.fi/tsoha/tulos/1)
 * [Tuloksen muokkaus](http://ljone.users.cs.helsinki.fi/tsoha/tulos/1/muokkaa)
 * [Tuloksen lisääminen](http://ljone.users.cs.helsinki.fi/tsoha/uusi)
+* [Sarjojen listaus](http://ljone.users.cs.helsinki.fi/tsoha/sarjat)
+* [Sarjan tarkemmat tiedot](http://ljone.users.cs.helsinki.fi/tsoha/sarja/1)
 
 
 ### Testitunnukset:
-Käyttäjätunnus: Esa
+Käyttäjätunnus: Esa	
 Salasana: 1234
 
 
