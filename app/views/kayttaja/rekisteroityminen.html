@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Rekisteröityminen</h1>
+  <br>
+  <div class="alert alert-warning">
+  Huom! Ota valitsemasi käyttäjätunnus ja salasana talteen, salasanaa ei saa palautettua.
+  </div>
+  <br>
+  {% if virheet %}
+   <div class="alert alert-warning">
+      {{virheet}}      
+    </div>
+  {% endif %} 
+  {% if message %}
+    <div class="alert alert-warning">
+      {{message}}      
+    </div>
+  {% endif %}   
+  <form method="post" action="{{base_path}}/register">
+    <div class="form-group">
+      <label>Anna käyttäjätunnus</label><br>
+      <label>(2-12 merkkiä)</label><br>
+      <input name="nimi" value="{{attribuutit.nimi}}" class="form" type="text" maxlength="12" width="6">
+    </div>
+    <div class="form-group">
+      <label>Anna salasana:</label><br>
+      <label>(4-12 merkkiä)</label><br>
+      <input name="password" class="form" type="password" maxlength="12" width="6"> 
+    </div>
+    <br>
+    <button type="submit" class="btn btn-warning">Luo käyttäjä</button>
+  </form>
+{% endblock %}

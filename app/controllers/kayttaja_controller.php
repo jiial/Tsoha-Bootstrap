@@ -24,4 +24,35 @@ class KayttajaController extends BaseController{
 		$_SESSION['kayttaja'] = null;
 		Redirect::to('/login', array('message' => 'Olet kirjautunut ulos'));
 	}
+
+	public static function register(){
+		View::make('kayttaja/rekisteroityminen.html');
+	}
+
+	public static function tallenna(){
+
+		$parametrit = $_POST;
+
+		$attribuutit = array(
+			'nimi' => $parametrit['nimi'],
+			'password' => $parametrit['password']
+		);
+
+		$kayttaja = new Kayttaja($attribuutit);
+
+		$virheet = $kayttaja->errors();
+
+		if(count($virheet) == 0){
+			$kayttaja->luo();
+
+			Redirect::to('{{base_path}}/kirjautuminen', array('viesti' => 'Rekisteröityminen onnistui! Voit nyt kirjautua sisään.'));
+		}else{
+			View::make('/kayttaja/rekisteroityminen.html', array(
+				'virheet' => $virheet,
+				'nimi' => $parametrit['nimi']
+				));
+		}
+
+
+	}
 }

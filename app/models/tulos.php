@@ -22,7 +22,7 @@ class Tulos extends BaseModel{
             $sivun_koko = $options['sivun_koko'];
             $sivu = $options['sivu'];
         }else{
-            $sivun_koko = 15;
+            $sivun_koko = 10;
             $sivu = 1;
         }
         $query_string .= ' LIMIT :limit OFFSET :offset';
@@ -150,6 +150,26 @@ class Tulos extends BaseModel{
     	$rivi = $query->fetch();
 
     	Kint::dump($rivi);
+    }
+
+    public function tuloksen_sarjat($id){
+        $query = DB::connection()->prepare('SELECT * FROM Sarja WHERE tulos = :id');
+
+        $query->execute(array('id' => $id));
+
+        $rivit = $query->fetchAll();
+        $sarjat = array();
+
+        foreach ($rivit as $rivi){
+            $sarjat = new Sarja(array(
+                'id' => $id,
+                'arvo' => $rivi['arvo'],
+                'lisatiedot' => $rivi['lisatiedot'],
+                 'tulos' => $rivi['tulos']
+                ));
+        }
+
+        return $sarjat;
     }
 
     public function laske(){

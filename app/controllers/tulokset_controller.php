@@ -12,18 +12,27 @@ class TuloksetController extends BaseController{
 		$tulosten_maara = Tulos::laske();
 		$tulosten_maara = $tulosten_maara['count'];
 		
-		$page_size = 15;
+		$page_size = 10;
 		$pages = ceil($tulosten_maara/$page_size);
+
+		$page = (isset($_GET['page']) AND (int) $_GET['page'] > 0) ? (int) $_GET['page'] : 1;
+        $prev_page = $page - 1;
+        $next_page = $page + 1;
+        if ($prev_page < 1) {
+            $prev_page = null;
+        } elseif ($next_page > $pages) {
+            $next_page = null;
+        }
 
 		if(isset($parametrit['search'])){
 			$options['search'] = $parametrit['search'];
 		}
 
 		$options['sivun_koko'] = $page_size;
-		$options['sivu'] = get_query_var('paged');
+		$options['sivu'] = $page;
 		$tulokset = Tulos::kaikki($options);
 
-		View::make('tulos/tulokset.html', array('tulokset' => $tulokset, 'page_size' => $page_size, 'pages' => $pages));
+		View::make('tulos/tulokset.html', array('tulokset' => $tulokset, 'page_size' => $page_size, 'pages' => $pages, 'page' => $page));
 	}
 
 	public static function muokkaa($id){
@@ -37,8 +46,6 @@ class TuloksetController extends BaseController{
 	public static function paivita($id){
 		self::check_logged_in();
 		$parametrit = $_POST;
-
-		$aselaji = $parametrit['aselaji'];
 
 		$attribuutit = array(
 		    'id' => $id, 
@@ -71,6 +78,11 @@ class TuloksetController extends BaseController{
 	public static function tuhoa($id){
 		self::check_logged_in();
 		$tulos = new Tulos(array('id' => $id));
+		$sarjat = array();
+		$sarjat = array($tulos->tuloksen_sarjat($id));
+		foreach ($sarjat as $sarja) {
+			$sarja->poista();
+		}
 
 		$tulos->poista();
 
@@ -118,7 +130,12 @@ class TuloksetController extends BaseController{
 
 		if(count($virheet) == 0){
 			$tulos->tallenna();
-			//$sarja1->tallenna();
+			$sarja1 = new Sarja(array('arvo' => $parametrit['sarja1'], 'lisatiedot' => '', 'tulos' => $tulos->id));		//$sarja2 = new Sarja($parametrit['sarja2'], '', $tulos);
+		//$sarja3 = new Sarja($parametrit['sarja3'], '', $tulos);
+		//$sarja4 = new Sarja($parametrit['sarja4'], '', $tulos);
+		//$sarja5 = new Sarja($parametrit['sarja5'], '', $tulos);
+		//$sarja6 = new Sarja($parametrit['sarja6'], '', $tulos);
+			$sarja1->tallenna();
 			//$sarja2->tallenna();
 			//$sarja3->tallenna();
 			//$sarja4->tallenna();

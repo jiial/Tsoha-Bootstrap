@@ -11,7 +11,13 @@
     <div class="alert alert-warning">
       {{message}}      
     </div>
-  {% endif %}   
+  {% endif %}
+  {% if viesti %}
+    <div class="alert alert-succes">
+      {{viesti}}      
+    </div>
+  {% endif %}
+
   <form method="post" action="{{base_path}}/login">
     <div class="form-group">
       <label>Käyttäjätunnus</label><br>

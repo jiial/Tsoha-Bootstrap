@@ -60,6 +60,14 @@
     TuloksetController::muokkaa($id);
   });
 
+  $routes->post('/sarja/:id/muokkaa', 'check_logged_in', function($id){
+    SarjatController::paivita($id);
+  });
+
+  $routes->get('/sarja/:id/muokkaa', 'check_logged_in', function($id){
+    SarjatController::muokkaa($id);
+  });
+
   $routes->post('/tulos/:id/poista', 'check_logged_in', function($id){
     TuloksetController::tuhoa($id);
   });
@@ -74,6 +82,14 @@
 
   $routes->post('/logout', function() {
     KayttajaController::logout();
+  });
+
+  $routes->get('/register', function() {
+    KayttajaController::register();
+  });
+
+  $routes->post('/register', function() {
+    KayttajaController::tallenna();
   });
 
 
