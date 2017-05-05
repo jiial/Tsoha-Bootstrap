@@ -2,8 +2,20 @@
 {% block content %}
   <h1>Sarjasi</h1>
   <br>
-  </br>
 
+  {% if sarjoja %}
+  <a href="{{base_path}}/sarjat" class="btn btn-warning">Näytä kaikki</a>
+  <div class="dropdown">
+      <button class="btn btn-warning" id="rajaaSarjat_button">Rajaa</button>
+      <div class="dropdown-content" id="rajaaSarjat_button">
+        <a href="{{base_path}}/sarjat/40ls">40l ls</a>
+        <a href="{{base_path}}/sarjat/60ls">60 ls</a>
+        <a href="{{base_path}}/sarjat/3x20ls">3x20 ls</a>
+        <a href="{{base_path}}/sarjat/3x40ls">3x40 ls</a>
+        <a href="{{base_path}}/sarjat/makuu">Makuu 60 ls</a>
+      </div>
+    </div>
+    <br></br>
   <table class="table table-hover table-bordered">
     <thead>
       <tr>
@@ -24,13 +36,20 @@
 
   <nav>
     <ul class="pagination">
-      <li class="{% if not prev_page %}disabled{% endif %}"><a href="{{base_path}}/sarjat?page={{prev_page}}"><span aria-hidden="true">«</span><span class="sr-only">Previous</span></a></li>
+      <li class="{% if not prev_page %}disabled{% endif %}"><a href="{{base_path}}/sarjat{% if kilpailumuoto %}/{{kilpailumuoto}}{% endif %}?page={{prev_page}}"><span aria-hidden="true">«</span><span class="sr-only">Previous</span></a></li>
       {% for page in 1..pages %}
-        <li class="{% if curr_page == page %}active{% endif %}"><a href="{{base_path}}/sarjat?page={{page}}">{{page}}</a></li>
+        <li class="{% if curr_page == page %}active{% endif %}"><a href="{{base_path}}/sarjat{% if kilpailumuoto %}/{{kilpailumuoto}}{% endif %}?page={{page}}">{{page}}</a></li>
       {% endfor %}
-      <li class="{% if not next_page %}disabled{% endif %}"><a href="{{base_path}}/sarjat?page={{next_page}}"><span aria-hidden="true">»</span><span class="sr-only">Next</span></a></li>
+      <li class="{% if not next_page %}disabled{% endif %}"><a href="{{base_path}}/sarjat{% if kilpailumuoto %}/{{kilpailumuoto}}{% endif %}?page={{next_page}}"><span aria-hidden="true">»</span><span class="sr-only">Next</span></a></li>
     </ul>
   </nav>
-
-
+  {% else %}
+    {% if rajaus %}
+    <a href="{{base_path}}/sarjat" class="btn btn-warning">Näytä kaikki</a>
+    <br></br>
+    <div class="alert alert-warning">Ei sarjoja annetulla rajauksella</div>
+    {% else %}
+    <div class="alert alert-warning">Ei lisättyjä sarjoja</div>
+    {% endif %}
+  {% endif %}
 {% endblock %}

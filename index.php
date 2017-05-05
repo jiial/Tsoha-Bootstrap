@@ -32,7 +32,7 @@
   $routes->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
 
   $routes->get('/tietokantayhteys', function(){
-    DB::test_connection();
+      DB::test_connection(); 
   });
 
   // Otetaan reitit käyttöön

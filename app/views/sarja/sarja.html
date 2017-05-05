@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<a href="{{base_path}}/sarjat" class="btn btn-warning">Takaisin sarjalistaukseen</a>
+<a href="{{base_path}}/sarjat" class="btn btn-warning">Sarjalistaukseen</a>
 
   <h1>{{sarja.arvo}}</h1>
 
@@ -17,9 +17,6 @@
   </ul>
 
   <p>
-    <form method="post" action="{{base_path}}/sarja/{{sarja.id}}/poista" style="display: inline-block;">
-        <button type="submit" class="btn btn-warning">Poista</button>
-    </form> 
       <a href="{{base_path}}/sarja/{{sarja.id}}/muokkaa" class="btn btn-default">Muokkaa</a>   
   </p>
 {% endblock %}

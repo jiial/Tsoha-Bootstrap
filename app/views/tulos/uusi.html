@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+
   <h1>Lisää uusi tulos</h1><br>
 
   {% if virheet %}
@@ -16,35 +17,29 @@
     <div class="form-group">
       <label>Tulos</label><br>
       <input name="arvo" maxlength="5" size="6" type="text" value="{{attribuutit.arvo}}">
+      <input name="aselaji" value="{{aselaji}}" type="hidden">
+      <input name="kilpailumuoto" value="{{kilpailumuoto}}" type="hidden">
+      <input name="tallennettu" value="{{tallennettu}}" type="hidden">
     </div>
 
     <div class="form-group">
       <label>Sarjat</label><br>
-      <input name="sarja1" size="4" type="text" maxlength="5">
-      <input name="sarja2" size="4" type="text" maxlength="5">
-      <input name="sarja3" size="4" type="text" maxlength="5">
-      <input name="sarja4" size="4" type="text" maxlength="5">
-      <input name="sarja5" size="4" type="text" maxlength="5">
-      <input name="sarja6" size="4" type="text" maxlength="5">
+      {% if kuusikymmenta %}
+      {% for i in 0..5 %}
+        <input name="sarjat[]" size="4" type="text" maxlength="5" value="{{sarjoja[i]}}">
+      {% endfor %}
+      {% endif %}
+      {% if neljakymmenta %}
+      {% for i in 0..3 %}
+        <input name="sarjat[]" size="4" type="text" maxlength="5" value="{{sarjoja[i]}}">
+      {% endfor %}
+      {% endif %}
+      {% if satakaksikymmenta %}
+      {% for i in 0..11 %}
+        <input name="sarjat[]" size="4" type="text" maxlength="5" value="{{sarjoja[i]}}">
+      {% endfor %}
+      {% endif %}
     </div> 
-
-    <div class="form-group">
-      <label>Aselaji</label><br>
-      <select name="aselaji" value="{{aselaji.nimi}}">
-        {% for aselaji in aselajit %}
-          <option value="{{aselaji.id}}">{{aselaji.nimi}}</option>
-        {% endfor %}       
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>Kilpailumuoto</label><br>
-      <select name="kilpailumuoto" value="{{kilpailumuoto.nimi}}">
-        {% for kilpailumuoto in kilpailumuodot %}
-          <option value="{{kilpailumuoto.id}}">{{kilpailumuoto.nimi}}</option>
-        {% endfor %}
-      </select>
-    </div>
 
     <div class="form-group">
       <label>Napakympit</label><br>
@@ -58,16 +53,17 @@
 
     <div class="form-group">
       <label>Päivämäärä (vuosi-kuukausi-päivä)</label><br>
-      <input name="paivamaara" size="8" type="text" maxlength="10" value="{{attribuutit.paivamaara}}">
+      <input name="paivamaara" size="8" type="text" maxlength="10" value="{{attribuutit.paivamaara}}" id="datepicker">
     </div>
 
     <div class="form-group">
       <label>Lisätiedot</label><br>
-       <textarea name="lisatiedot" class="form" cols="60" maxlength="500" value="{{attribuutit.lisatiedot}}"></textarea>
+       <textarea name="lisatiedot" class="form" cols="60" maxlength="500">{{attribuutit.lisatiedot}}</textarea>
     </div>
 
     <div class="form-group">
       <button type="submit" class="btn btn-warning">Lisää</button>
+      <a href="{{base_path}}/valitseAselaji" class="btn btn-default">Takaisin</a>
     </div>
   </form>
 {% endblock %}

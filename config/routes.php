@@ -28,14 +28,6 @@
     SarjatController::nayta($id);
   });
 
-  $routes->get('/tuloksenMuokkaus', function() {
-  	HelloWorldController::tuloksenMuokkaus();
-  });
-
-  $routes->get('/kirjautuminen', function() {
-  	HelloWorldController::kirjautuminen();
-  });
-
   $routes->get('/etusivu', function() {
   	HelloWorldController::etusivu();
   });
@@ -91,5 +83,74 @@
   $routes->post('/register', function() {
     KayttajaController::tallenna();
   });
+
+  $routes->get('/valitseAselaji', function() {
+    TuloksetController::aselaji();
+  });
+
+  $routes->post('/valitseAselaji', function() {
+    TuloksetController::aselajinVahvistus();
+  });
+
+  $routes->get('/valitseKilpailumuoto', function() {
+    TuloksetController::kilpailumuoto();
+  });
+
+  $routes->post('/valitseKilpailumuoto', function() {
+    TuloksetController::kilpailumuodonVahvistus();
+  });
+
+  $routes->get('/ennatykset/ilmakivaari', function() {
+    TuloksetController::ik();
+  });
+
+  $routes->get('/ennatykset/pienoiskivaari', function() {
+    TuloksetController::pk();
+  });
+
+  $routes->get('/ennatykset/vakiokivaari', function() {
+    TuloksetController::vk();
+  });
+
+  $routes->get('/ennatykset/300mkivaari', function() {
+    TuloksetController::kk();
+  });
+
+    $routes->get('/tulokset/ilmakivaari', function() {
+    TuloksetController::rajaaik();
+  });
+
+  $routes->get('/tulokset/pienoiskivaari', function() {
+    TuloksetController::rajaapk();
+  });
+
+  $routes->get('/tulokset/vakiokivaari', function() {
+    TuloksetController::rajaavk();
+  });
+
+  $routes->get('/tulokset/300mkivaari', function() {
+    TuloksetController::rajaakk();
+  });
+
+  $routes->get('/sarjat/40ls', function() {
+    SarjatController::neljakymmenta();
+  });
+
+  $routes->get('/sarjat/60ls', function() {
+    SarjatController::kuusikymmenta();
+  });
+
+  $routes->get('/sarjat/3x20ls', function() {
+    SarjatController::kolmekertaakaksikymmenta();
+  });
+
+  $routes->get('/sarjat/3x40ls', function() {
+    SarjatController::kolmekertaaneljakymmenta();
+  });
+
+  $routes->get('/sarjat/makuu', function() {
+    SarjatController::makuu();
+  });
+
 
 

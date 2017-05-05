@@ -27,4 +27,24 @@ class Kilpailumuoto extends BaseModel{
 		return $kilpailumuodot;
 	}
 
+	public static function getNimi($id){
+		$query = DB::connection()->prepare('SELECT nimi FROM Kilpailumuoto WHERE id = :id');
+
+		$query->execute(array('id' => $id));
+
+		$rivi = $query->fetch();
+
+		return $rivi;
+	}
+
+	public static function getId($nimi){
+		$query = DB::connection()->prepare('SELECT id FROM Kilpailumuoto WHERE nimi = :nimi');
+
+		$query->execute(array('nimi' => $nimi));
+
+		$rivi = $query->fetch();
+
+		return $rivi;
+	}
+
 }

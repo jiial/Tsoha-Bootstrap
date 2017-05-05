@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Valitse haluamasi aselaji</h2>
+
+<form method="post" action="{{base_path}}/valitseAselaji">
+
+  <div class="form-group">
+      <label>Aselaji</label><br>
+      <select name="aselaji">
+        {% for aselaji in aselajit %}
+          <option value="{{aselaji.id}}">{{aselaji.nimi}}</option>
+        {% endfor %}       
+      </select>
+  </div>
+
+  <div class="form-group">
+    <button type="submit" class="btn btn-warning">Jatka</button>
+    <a href="{{base_path}}/tulokset" class="btn btn-default">Takaisin</a>
+  </div>
+</form> 
+
+{% endblock %}

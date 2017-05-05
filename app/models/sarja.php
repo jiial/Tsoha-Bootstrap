@@ -11,27 +11,48 @@ class Sarja extends BaseModel{
 
 	public static function kaikki($options){
 
+		$querystring = 'SELECT Sarja.arvo, Sarja.id, Sarja.lisatiedot, Tulos.kilpailumuoto, Tulos.id AS tulos FROM Sarja LEFT JOIN Tulos ON Sarja.tulos = Tulos.id AND Tulos.kayttaja = :kayttaja WHERE Tulos.kayttaja = :kayttaja';
+
 		if(isset($options['sivu']) && isset($options['sivun_koko'])){
-            $sivun_koko = $options['sivun_koko'];
-            $sivu = $options['sivu'];
-            $query = DB::connection()->prepare('SELECT Sarja.arvo, Sarja.id, Sarja.lisatiedot, Tulos.id AS tulos FROM Sarja LEFT JOIN Tulos ON Sarja.tulos = Tulos.id AND Tulos.kayttaja = :kayttaja WHERE Tulos.kayttaja = :kayttaja LIMIT :limit OFFSET :offset');
+			if(isset($options['kilpailumuoto'])){
+				$querystring .= ' AND Tulos.kilpailumuoto = :kilpailumuoto';
+            	$sivun_koko = $options['sivun_koko'];
+            	$sivu = $options['sivu'];
+            	$querystring .= ' LIMIT :limit OFFSET :offset';
+            	$query = DB::connection()->prepare($querystring);
+
+            $query->execute(array('kayttaja' => $_SESSION['kayttaja'], 'limit' => $sivun_koko, 'offset' => $sivun_koko * ($sivu - 1), 'kilpailumuoto' => $options['kilpailumuoto']));
+        	}else{
+        		$sivun_koko = $options['sivun_koko'];
+            	$sivu = $options['sivu'];
+            	$querystring .= ' LIMIT :limit OFFSET :offset';
+            	$query = DB::connection()->prepare($querystring);
 
             $query->execute(array('kayttaja' => $_SESSION['kayttaja'], 'limit' => $sivun_koko, 'offset' => $sivun_koko * ($sivu - 1)));
+        	}
         }else{
-            $sivun_koko = 10;
-            $sivu = 1;
-            $query = DB::connection()->prepare('SELECT Sarja.arvo, Sarja.id, Sarja.lisatiedot, Tulos.id AS tulos FROM Sarja LEFT JOIN Tulos ON Sarja.tulos = Tulos.id AND Tulos.kayttaja = :kayttaja WHERE Tulos.kayttaja = :kayttaja');
-
-            $query->execute(array('kayttaja' => $_SESSION['kayttaja']));
-        }
-
-		
+        	if(isset($options['kilpailumuoto'])){
+				$querystring .= ' AND Tulos.kilpailumuoto = :kilpailumuoto';
+        		$query = DB::connection()->prepare($querystring);
+            	$query->execute(array('kayttaja' => $_SESSION['kayttaja'], 'kilpailumuoto' => $options['kilpailumuoto']));
+        	}else{
+        		$query = DB::connection()->prepare($querystring);
+            	$query->execute(array('kayttaja' => $_SESSION['kayttaja']));
+        	}
+        }	
 
 		$rivit = $query->fetchAll();
-		
 		$sarjat = array();
 
 		foreach ($rivit as $rivi){
+
+			if($rivi['kilpailumuoto'] == 2){
+				$rivi['arvo'] = (int)$rivi['arvo'];
+			}
+			if($rivi['kilpailumuoto'] == 3){
+				$rivi['arvo'] = (int)$rivi['arvo'];
+			}
+
 			$sarjat[] = new Sarja(array(
 				'id' => $rivi['id'],
 				'arvo' => $rivi['arvo'],
@@ -39,6 +60,7 @@ class Sarja extends BaseModel{
 				 'tulos' => $rivi['tulos']
 				));
 		}
+
 		return $sarjat;
 	}
 
@@ -61,23 +83,14 @@ class Sarja extends BaseModel{
 		return null;
 	}
 
-	public static function tuloksen_sarjat($id){
-		$query = DB::connection()->prepare('SELECT * FROM Sarja WHERE tulos = :id');
+	public static function sarjanTulos($id){
+		$query = DB::connection()->prepare('SELECT Tulos.id, Tulos.kilpailumuoto FROM Sarja LEFT JOIN Tulos ON Sarja.tulos = Tulos.id WHERE Sarja.id = :id');
 
 		$query->execute(array('id' => $id));
 
-		$rivit = $query->fetchAll();
-		$sarjat = array();
+		$rivi = $query->fetch();
 
-		foreach ($sarjat as $sarja){
-			$sarjat = new Sarja(array(
-				'arvo' => $rivi['arvo'],
-				'lisatiedot' => $rivi['lisatiedot'],
-				 'tulos' => $rivi['tulos']
-				));
-		}
-
-		return $sarjat;
+		return $rivi;
 	}
 
 	public function tallenna(){
@@ -87,8 +100,6 @@ class Sarja extends BaseModel{
   	    $query->execute(array('arvo' => $this->arvo, 'lisatiedot' => $this->lisatiedot, 'tulos' => $this->tulos));
 
   	    $rivi = $query->fetch();
-      	Kint::trace();
-  	    Kint::dump($rivi);
       	$this->id = $rivi['id'];
     }
 
@@ -104,7 +115,7 @@ class Sarja extends BaseModel{
     }
 
     public function poista(){
-    	$apu = (int)$this->id;
+    	$apu = (int)$this->tulos;
     	$query = DB::connection()->prepare('DELETE FROM Sarja WHERE tulos = :apu');
 
     	$query->execute(array('apu' => $apu));
@@ -112,8 +123,15 @@ class Sarja extends BaseModel{
     	$rivi = $query->fetch();
     }
 
-    public function laske(){
-        $query = DB::connection()->prepare('SELECT COUNT(*) FROM Sarja WHERE kayttaja = :id');
+    public function laske($kilpailumuoto){
+        $query = DB::connection()->prepare('SELECT COUNT(Sarja.arvo) FROM Sarja LEFT JOIN Tulos ON Sarja.tulos = Tulos.id AND Tulos.kayttaja = :kayttaja WHERE Tulos.kayttaja = :kayttaja AND kilpailumuoto = :kilpailumuoto');
+        $query->execute(array('kayttaja' => $_SESSION['kayttaja'], 'kilpailumuoto' => $kilpailumuoto));
+        $rivi = $query->fetch();
+
+        return $rivi;
+    }
+
+    public function laskeKaikki(){
         $query = DB::connection()->prepare('SELECT COUNT(Sarja.arvo) FROM Sarja LEFT JOIN Tulos ON Sarja.tulos = Tulos.id AND Tulos.kayttaja = :kayttaja WHERE Tulos.kayttaja = :kayttaja');
         $query->execute(array('kayttaja' => $_SESSION['kayttaja']));
         $rivi = $query->fetch();
@@ -126,13 +144,16 @@ class Sarja extends BaseModel{
   	    if($this->arvo == '' || $this->arvo == null){
   	    	$virheet[] = 'Sarja ei saa olla tyhjä!';
   	    }
-  	    if(strlen($this->arvo) < 3){
-  	    	$virheet[] = 'Sarjan arvon tulee olla vähintään kolme merkkiä pitkä.';
-  	    }
         if(is_numeric($this->arvo) == false){
             $virheet[] = 'Sarjan arvon tulee olla numero!';
+        }      
+        if($this->arvo > 109.0){
+        	$virheet[] = 'Sarjan arvo liian suuri';
         }
-
+        if($this->arvo < 40){
+        	$virheet[] = 'Sarjan arvo liian pieni';
+        }
+        
   	    return $virheet;
     }
 }

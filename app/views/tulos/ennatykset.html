@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1><strong>Ennätykset</strong></h1>
+
+<h2>{{aselaji.nimi}}</h2>
+<br>
+
+<table class="table table-hover table-bordered">
+    <thead>
+      <tr>
+      {% for kilpailumuoto in kilpailumuodot %}
+        <th>{{kilpailumuoto.nimi}}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    
+    <tbody>
+      <tr>
+      {% for ennatys in ennatykset %}
+      {% if ennatys.arvo != "Ei tuloksia" %}
+        <td><a href="{{base_path}}/tulos/{{ennatys.id}}">{{ennatys.arvo}}<a/></td>
+        {% else %}
+        <td>{{ennatys.arvo}}</td>
+        {% endif %}
+        {% endfor %}
+      </tr>     
+    </tbody>
+  </table>
+<br>
+
+{% endblock %}

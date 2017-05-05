@@ -21,7 +21,7 @@ CREATE TABLE KilpailumuodonLaji(
 
 CREATE TABLE Tulos(
   id SERIAL PRIMARY KEY,
-  arvo DECIMAL(4,1),
+  arvo DECIMAL(5,1),
   kilpailu varchar(30),
   paivamaara DATE,
   lisatiedot varchar(500),
@@ -33,7 +33,7 @@ CREATE TABLE Tulos(
 
 CREATE TABLE Sarja(
   id SERIAL PRIMARY KEY,
-  arvo DECIMAL(4,1),
+  arvo DECIMAL(5,1),
   lisatiedot varchar(200),
   tulos INTEGER REFERENCES Tulos(id)
 );

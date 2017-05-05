@@ -3,7 +3,7 @@
 class KayttajaController extends BaseController{
 
 	public static function kirjautuminen(){
-		View::make('suunnitelmat/kirjautuminen.html');
+		View::make('kayttaja/kirjautuminen.html');
 	}
 
 	public static function kasittele_kirjautuminen(){
@@ -12,7 +12,7 @@ class KayttajaController extends BaseController{
 		$kayttaja = Kayttaja::autentikoi($parametrit['kayttajanimi'], $parametrit['salasana']);
 
 		if(!$kayttaja){
-			View::make('suunnitelmat/kirjautuminen.html', array('error' => 'Väärä käyttäjätunnus tai salasana', 'kayttajanimi' => $parametrit['kayttajanimi']));
+			View::make('kayttaja/kirjautuminen.html', array('error' => 'Väärä käyttäjätunnus tai salasana', 'kayttajanimi' => $parametrit['kayttajanimi']));
 		}else{
 			$_SESSION['kayttaja'] = $kayttaja->id;
 
@@ -39,13 +39,14 @@ class KayttajaController extends BaseController{
 		);
 
 		$kayttaja = new Kayttaja($attribuutit);
+		
 
 		$virheet = $kayttaja->errors();
 
 		if(count($virheet) == 0){
 			$kayttaja->luo();
 
-			Redirect::to('{{base_path}}/kirjautuminen', array('viesti' => 'Rekisteröityminen onnistui! Voit nyt kirjautua sisään.'));
+			Redirect::to('/login', array('viesti' => 'Rekisteröityminen onnistui! Voit nyt kirjautua sisään.'));
 		}else{
 			View::make('/kayttaja/rekisteroityminen.html', array(
 				'virheet' => $virheet,

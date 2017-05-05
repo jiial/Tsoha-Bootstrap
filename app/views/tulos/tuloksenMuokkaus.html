@@ -16,32 +16,7 @@
     <div class="form-group">
       <label>Tulos</label><br>
       <input name="arvo" size="4" value="{{attribuutit.arvo}}"" type="text" maxlength="5">
-    </div>
-    <div class="form-group">
-      <label>Sarjat</label><br>
-      <input name="sarja1" size="4" value="102.5" type="text" maxlength="5">
-      <input name="sarja2" size="4" value="103.2" type="text" maxlength="5">
-      <input name="sarja3" size="4" value="101.7" type="text" maxlength="5">
-      <input name="sarja4" size="4" value="102.0" type="text" maxlength="5">
-      <input name="sarja5" size="4" value="103.1" type="text" maxlength="5">
-      <input name="sarja6" size="4" value="102.9" type="text" maxlength="5">
     </div>  
-    <div class="form-group">
-      <label>Aselaji</label><br>
-      <select name="aselaji" value="{{aselaji.nimi}}">
-        {% for aselaji in aselajit %}
-          <option value="{{aselaji.id}}">{{aselaji.nimi}}</option>
-        {% endfor %}  
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Kilpailumuoto</label><br>
-      <select name="kilpailumuoto" value="{{kilpailumuoto.nimi}}">
-        {% for kilpailumuoto in kilpailumuodot %}
-          <option value="{{kilpailumuoto.id}}">{{kilpailumuoto.nimi}}</option>
-        {% endfor %}
-      </select>
-    </div>
     <div class="form-group">
       <label>Napakympit</label><br>
       <input name="napakympit" size="4" maxlength="2" type="text" value="{{attribuutit.napakympit}}">

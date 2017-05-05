@@ -55,4 +55,5 @@
       $kilpailumuodot = Kilpailumuoto::kaikki();
       View::make('tulos/uusi.html', array('aselajit' => $aselajit, 'kilpailumuodot' => $kilpailumuodot));
     }
+
   }

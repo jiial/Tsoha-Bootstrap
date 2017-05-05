@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+  <head lang="en">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,6 +17,10 @@
 
       <!-- Oma tyylitiedostomme -->
       <link href="{{base_path}}/assets/css/site.css" rel="stylesheet">
+
+      <!-- Datepickerin tyylitiedostot -->
+      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+      <link rel="stylesheet" href="/resources/demos/style.css">
     {% endblock %}
   </head>
 
@@ -53,6 +57,16 @@
               <li><a href="{{base_path}}/sarjat">Sarjasi</a></li>
             </ul>
 
+            <div class="dropdown">
+              <button class="dropbtn">Ennätykset</button>
+              <div class="dropdown-content">
+                <a href="{{base_path}}/ennatykset/ilmakivaari">Ilmakivääri</a>
+                <a href="{{base_path}}/ennatykset/pienoiskivaari">Pienoiskivääri</a>
+                <a href="{{base_path}}/ennatykset/300mkivaari">300m Kivääri</a>
+                <a href="{{base_path}}/ennatykset/vakiokivaari">300m Vakiokivääri</a>
+              </div>
+            </div>
+
           {% endif %}
 
           {% if user_logged_in %}
@@ -76,6 +90,17 @@
     {% block body %}
       <!-- jQuery -->
       <script src="{{base_path}}/vendor/jquery.min.js"></script>
+
+      <!-- Datepicker -->
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script>
+        $( function() {
+          $( "#datepicker" ).datepicker({
+            dateFormat:"yy-mm-dd"
+          });
+        } );
+        </script>
 
       <!-- Bootstrap (skriptitiedosto) -->
       <script src="{{base_path}}/vendor/bootstrap/js/bootstrap.min.js"></script>

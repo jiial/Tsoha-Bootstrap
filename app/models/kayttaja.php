@@ -41,7 +41,7 @@ class Kayttaja extends BaseModel{
     return null;
   }
 
-  public static function luo(){
+  public function luo(){
 
     $query = DB::connection()->prepare('INSERT INTO Kayttaja (nimi, password) VALUES (:nimi, :password) RETURNING id');
 
@@ -56,7 +56,7 @@ class Kayttaja extends BaseModel{
     $this->id = $rivi['id'];
   }
 
-  public static function validoiSalasana(){
+  public function validoiSalasana(){
     $virheet = array();
 
     if(strlen($this->password) < 4){
@@ -65,13 +65,14 @@ class Kayttaja extends BaseModel{
     if(strlen($this->password) > 12){
       $virheet[] = 'Salasana liian pitkä';
     }
-    if($this->password = $this->nimi){
+    if($this->password == $this->nimi){
       $virheet[] = 'Käyttäjätunnus ja salasana eivät voi olla samat!';
     }
+
     return $virheet;
   }  
 
-  public static function validoiNimi(){
+  public function validoiNimi(){
     $virheet = array();
 
     if(strlen($this->nimi) < 2){
@@ -80,6 +81,16 @@ class Kayttaja extends BaseModel{
     if(strlen($this->nimi) > 12){
       $virheet[] = 'Käyttäjätunnus liian pitkä';
     }
+
+    $query = DB::connection()->prepare('SELECT * FROM Kayttaja WHERE nimi = :nimi');
+    $query->execute(array('nimi' => $this->nimi));
+
+    $rivi = $query->fetch();
+
+    if($rivi != null){
+      $virheet[] = 'Käyttäjätunnus varattu';
+    }
+
     return $virheet;
   }    
 }

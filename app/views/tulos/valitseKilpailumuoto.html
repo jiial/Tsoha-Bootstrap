@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Valitse haluamasi kilpailumuoto</h2>
+
+<form method="post" action="{{base_path}}/valitseKilpailumuoto">
+
+  <div class="form-group">
+      <label>Kilpailumuoto</label><br>
+      <select name="kilpailumuoto">
+        {% for kilpailumuoto in kilpailumuodot %}
+          <option value="{{kilpailumuoto.id}}">{{kilpailumuoto.nimi}}</option>
+        {% endfor %}      
+      </select>
+      <input name="aselaji" value="{{aselaji}}" type="hidden">
+  </div>
+
+  <div class="form-group">
+    <button type="submit" class="btn btn-warning">Jatka</button>
+    <a href="{{base_path}}/valitseAselaji" class="btn btn-default">Takaisin</a>
+  </div>
+</form> 
+
+{% endblock %}

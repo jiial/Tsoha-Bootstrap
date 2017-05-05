@@ -13,6 +13,12 @@ class Tulos extends BaseModel{
 
         $query_string = 'SELECT * FROM Tulos WHERE kayttaja = :kayttaja_id';
         $parametrit = array('kayttaja_id' => $options['kayttaja_id']);
+
+        if(isset($options['rajaa'])){
+            $query_string .= ' AND aselaji = :aselaji';
+            $parametrit['aselaji'] = $options['rajaa'];
+        }
+
         if(isset($options['search'])){
             $query_string .= ' AND kilpailu LIKE :like';
             $parametrit['like'] = '%' . $options['search'] . '%';
@@ -34,6 +40,7 @@ class Tulos extends BaseModel{
 		$query->execute($parametrit);
 
 		$rivit = $query->fetchAll();
+        
 		$tulokset = array();
 
 
@@ -51,7 +58,14 @@ class Tulos extends BaseModel{
 		    $query->execute(array('id' => $rivi['kilpailumuoto']));
 
 		    $apu = $query->fetch();
-		    $kilpailumuoto = $apu['nimi'];	
+		    $kilpailumuoto = $apu['nimi'];
+
+            if($kilpailumuoto == '3x40 ls'){
+                $rivi['arvo'] = (int)$rivi['arvo'];
+            }	
+            if($kilpailumuoto == '3x20 ls'){
+                $rivi['arvo'] = (int)$rivi['arvo'];
+            }
 
 			
 			$tulokset[] = new Tulos(array(
@@ -116,8 +130,6 @@ class Tulos extends BaseModel{
   	    $query->execute(array('arvo' => $this->arvo, 'kilpailu' => $this->kilpailu, 'paivamaara' => $this->paivamaara, 'lisatiedot' => $this->lisatiedot, 'napakympit' => $this->napakympit, 'kayttaja' => $this->kayttaja, 'aselaji' => $this->aselaji, 'kilpailumuoto' => $this->kilpailumuoto));
 
   	    $rivi = $query->fetch();
-      	Kint::trace();
-  	    Kint::dump($rivi);
       	$this->id = $rivi['id'];
     }
 
@@ -161,8 +173,8 @@ class Tulos extends BaseModel{
         $sarjat = array();
 
         foreach ($rivit as $rivi){
-            $sarjat = new Sarja(array(
-                'id' => $id,
+            $sarjat[] = new Sarja(array(
+                'id' => $rivi['id'],
                 'arvo' => $rivi['arvo'],
                 'lisatiedot' => $rivi['lisatiedot'],
                  'tulos' => $rivi['tulos']
@@ -180,16 +192,46 @@ class Tulos extends BaseModel{
         return $rivi;
     }
 
+    public function ennatykset($aselaji, $kilpailumuoto){
+        $query = DB::connection()->prepare('SELECT * FROM Tulos WHERE kayttaja = :id AND (aselaji = :aselaji AND kilpailumuoto = :kilpailumuoto) ORDER BY arvo DESC LIMIT 1');
+        $query->execute(array('id' => $_SESSION['kayttaja'], 'aselaji' => $aselaji, 'kilpailumuoto' => $kilpailumuoto['id']));
+        $rivi = $query->fetch();
+
+        return $rivi;
+    }
+
     public function validoiArvo(){
   	    $virheet = array();
   	    if($this->arvo == '' || $this->arvo == null){
   	    	$virheet[] = 'Tulos ei saa olla tyhjä!';
   	    }
-  	    if(strlen($this->arvo) < 3){
-  	    	$virheet[] = 'Tuloksen arvon tulee olla vähintään kolme merkkiä pitkä.';
-  	    }
+        if($this->kilpailumuoto == 2 || $this->kilpailumuoto == 3){
+  	        if(strlen($this->arvo) < 2){
+  	    	    $virheet[] = 'Tuloksen arvon tulee olla vähintään kolme merkkiä pitkä.';
+  	        }
+            if($this->kilpailumuoto == 2){
+                if($this->arvo > 600){
+                    $virheet[] = 'Tuloksen arvo liian suuri';
+                }
+            }
+            if($this->kilpailumuoto == 3){
+                if($this->arvo > 1200){
+                    $virheet[] = 'Tuloksen arvo liian suuri';
+                }
+            }
+        }else{
+            if(strlen($this->arvo) < 5){
+                $virheet[] = 'Tuloksen arvon tulee olla vähintään viisi merkkiä pitkä (esim 599.5).';
+            }
+            if($this->arvo > 650.0){
+                $virheet[] = 'Tuloksen arvo liian suuri';
+            }
+        }
         if(is_numeric($this->arvo) == false){
             $virheet[] = 'Tuloksen arvon tulee olla numero!';
+        }
+        if($this->arvo < 200){
+            $virheet[] = 'Tuloksen arvo liian pieni';
         }
 
   	    return $virheet;
@@ -204,26 +246,28 @@ class Tulos extends BaseModel{
 
     public function validoiNapakympit(){
     	$virheet = array();
+
     	if(is_numeric($this->napakympit) == false){
     		$virheet[] = 'Napakymppien määrän tulee olla numero!';
     		return $virheet;
     	}
-    	if($this->kilpailumuoto == 1){
-    		if($this->napakympit > 60){
+    	if($this->kilpailumuoto == 4){
+    		if($this->napakympit > 40){
     			$virheet[] = 'Liikaa napakymppejä';
     		}
-    		if($this->napakympit < 0){
-    			$virheet[] = 'Liian vähän napakymppejä';
-    		}
     	}
-    	if($this->kilpailumuoto == 2){
+    	if($this->kilpailumuoto == 3){
     		if($this->napakympit > 120){
     			$virheet[] = 'Liikaa napakymppejä';
     		}
-    		if($this->napakympit < 0){
-    			$virheet[] = 'Liian vähän napakymppejä';
-    		}
-    	}
+    	}else{
+            if($this->napakympit > 60){
+                $virheet[] = 'Liikaa napakymppejä';
+            }
+        }
+        if($this->napakympit < 0){
+                $virheet[] = 'Liian vähän napakymppejä';
+        }
     	
     	return $virheet;
     }
@@ -242,19 +286,24 @@ class Tulos extends BaseModel{
     	if($paiva == '' || $kuukausi == '' || $vuosi == ''){
     		$virheet[] = 'Päivä, kuukausi tai vuosi puuttuu!';
     	}
-    	//if(strlen($paiva) != 2 || strlen($kuukausi) != 2 || strlen($vuosi) != 4){
-    		//$virheet[] = 'Päivämäärä ei kelvollinen (pitää olla muotoa [vvvv.kk.pp])!';
-    	//}
     	if($kuukausi > 12 || $kuukausi < 1){
     		$virheet[] = 'Virheellinen kuukausi!';
     	} 
     	if($paiva > 31 || $paiva < 1){
     		$virheet[] = 'Virheellinen päivä!';
     	} 
-    	if($vuosi > date('Y') || $vuosi < 1900){
+    	if($vuosi > (int)date('Y') || $vuosi < 1900){
     		$virheet[] = 'Virheellinen vuosi!';
-    	} 
+    	}
+        if(!checkdate($kuukausi, $paiva, $vuosi)){
+            $virheet[] = 'Päivämäärä virheellinen';
+        }
 
+        $nyt = new DateTime();
+        $pvm = DateTime::createFromFormat('Y-m-d', $this->paivamaara);
+        if($pvm > $nyt){
+            $virheet[] = 'Päivämäärä ei voi olla tulevaa aikaa!';
+        }
     	return $virheet;
     }
 
