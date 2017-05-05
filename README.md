@@ -10,7 +10,7 @@ Yleisiä linkkejä:
 
 **Aihekuvaus**
 
-Aiheena ampumaurheilijoille suunnattu henkilökohtainen tuloskirjanpitojärjestelmä. Käyttäjä kirjautuu järjestelmään omilla tunnuksillaan ja pääsee lisäämään uusia tuloksia sekä tarkastelemaan aiempia tuloksiaan. Käyttäjä näkee myös erilaisia tilastotietoja ja keskiarvoja omista tuloksistaan. Järjestelmän tarkoitus on auttaa urheilijaa seuraamaan omaa tuloskehitystään.
+Aiheena ampumaurheilijoille suunnattu henkilökohtainen tuloskirjanpitojärjestelmä. Käyttäjä kirjautuu järjestelmään omilla tunnuksillaan ja pääsee lisäämään uusia tuloksia sekä tarkastelemaan aiempia tuloksiaan. Käyttäjä näkee myös tuloksiin liittyviä sarjoja sekä ennätyksiään. Järjestelmän tarkoitus on auttaa urheilijaa seuraamaan omaa tuloskehitystään.
 
 
 ### Linkit html-sivuihin:
